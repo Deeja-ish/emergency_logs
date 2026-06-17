@@ -1,0 +1,306 @@
+USE emergency_log_data;
+
+Create table raw_hospital_logs (
+log_id INT,
+patient_name VARCHAR(100),
+admission_date VARCHAR(50),
+acuity_score INT,
+assigned_room VARCHAR(50),
+insurance_provider VARCHAR(100)
+);
+
+-- Inserting data with error  
+INSERT INTO raw_hospital_logs(log_id, patient_name, admission_date, acuity_score, assigned_room, insurance_provider) VALUES 
+(1001, '   chidi OKOROFOR ', '2026-05-01', 4, 'Room 102', 'AXA Mansard'),
+(1002, 'fatima abubakar', '05/01/2026', 5, 'ROOM 105', 'Reliance Health'), -- Bad date format!
+(1003, 'BLESSING _nwosu', '2026-05-02', 2, NULL, 'NEM Insurance'), -- Missing room & broken text symbol
+(1004, 'john doe', '2026-05-02', 3, 'room 102', 'axa mansard'), -- Lowercase mismatch
+(1001, '   chidi OKOROFOR ', '2026-05-01', 4, 'Room 102', 'AXA Mansard'), -- DUPLICATE ROW!
+(1005, 'Tunde_Alao   ', '2026-05-03', 1, 'Room 201', 'RELIANCE HEALTH'),
+(1006, '  Mary_am_  Okon ', '2026-05-03', 5, 'Rm 105', NULL), -- Missing insurance, bad room shortcode
+(1007, ' Musa Ibrahim', '05-04-2026', 3, 'Room 102', 'Leadway Assurance'), -- Yet another date style
+(1008, 'chinelo_eze', '2026-05-04', 2, 'ROOM 204', 'AXA Mansard'),
+(1009, 'FUNMI_ADEYEMI', '2026-05-05', 4, NULL, 'Reliance Health'), -- Missing room
+(1010, 'john doe', '2026-05-02', 3, 'room 102', 'axa mansard'), -- Another duplicate!
+(1011, '  emeka_NNAJI ', '2026-05-05', 1, 'Room 108', 'Leadway Assurance'),
+(1012, 'AISHA_MUHAMMAD', '2026-05-06', 5, 'ROOM 105', 'AXA Mansard'),
+(1013, 'kemi_adebayo', '05/06/2026', 2, 'Rm 102', NULL),
+(1014, '  chioma_OBI ', '2026-05-07', 3, 'Room 110', 'Reliance Health'),
+(1015, 'OLUMIDE_BAKARE', '2026-05-07', 4, 'ROOM 108', 'NEM Insurance'),
+(1016, '  Nuhu_Ribadu ', '2026-05-08', 2, 'Room 201', 'AXA Mansard'),
+(1017, 'Yinka_Shonibare', '2026-05-08', 1, NULL, 'Leadway Assurance'),
+(1018, '  Zainab_Abba ', '05-09-2026', 5, 'ROOM 105', 'Reliance Health'),
+(1019, 'Chinedu_Ikedieze', '2026-05-09', 3, 'Room 110', 'NEM Insurance'),
+(1020, '  funke_AKINDELE ', '2026-05-10', 4, 'Rm 108', 'AXA Mansard'),
+(1012, 'AISHA_MUHAMMAD', '2026-05-06', 5, 'ROOM 105', 'AXA Mansard'), -- Duplicate
+(1021, '  Amarachi_Onyema ', '2026-05-10', 2, 'Room 102', NULL),
+(1022, 'BASHIR_YUSUF', '2026-05-11', 3, 'ROOM 204', 'Leadway Assurance'),
+(1023, '  Halima_Bello ', '05/11/2026', 1, 'Room 108', 'Reliance Health'),
+(1024, 'Osas_Ighodaro', '2026-05-12', 5, 'ROOM 105', 'NEM Insurance'),
+(1025, '  Tobi_Amusan ', '2026-05-12', 4, NULL, 'AXA Mansard'),
+(1026, 'Uche_Jombo', '2026-05-13', 2, 'Rm 201', 'Leadway Assurance'),
+(1027, '  Banky_Wellington ', '2026-05-13', 1, 'Room 110', 'Reliance Health'),
+(1028, 'Genevieve_Nnaji', '05-14-2026', 3, 'ROOM 108', 'NEM Insurance'),
+(1029, '  Davido_Adeleke ', '2026-05-14', 5, 'Room 105', 'AXA Mansard'),
+(1030, 'Wizkid_Balogun', '2026-05-15', 2, 'Room 102', NULL),
+(1031, '  Burna_Boy ', '2026-05-15', 4, 'ROOM 204', 'Leadway Assurance'),
+(1032, 'Tiwa_Savage', '05/16/2026', 3, 'Rm 108', 'Reliance Health'),
+(1033, '  Olamide_Adedeji ', '2026-05-16', 1, 'Room 110', 'NEM Insurance'),
+(1034, 'Don_Jazzy', '2026-05-17', 5, 'ROOM 105', 'AXA Mansard'),
+(1035, '  Falz_Folarin ', '2026-05-17', 2, NULL, 'Leadway Assurance'),
+(1036, 'Rema_Divine', '2026-05-18', 3, 'Room 201', 'Reliance Health'),
+(1037, '  Asake_Ololade ', '05-19-2026', 4, 'ROOM 108', 'NEM Insurance'),
+(1038, 'Fireboy_DML', '2026-05-19', 1, 'Room 102', 'AXA Mansard'),
+(1039, '  Ayra_Starr ', '2026-05-20', 5, 'Rm 105', NULL),
+(1029, '  Davido_Adeleke ', '2026-05-14', 5, 'Room 105', 'AXA Mansard'), -- Duplicate
+(1040, 'Tems_Openiyi', '2026-05-20', 2, 'Room 110', 'Leadway Assurance'),
+(1041, '  Ckay_Yo ', '05/21/2026', 3, 'ROOM 204', 'Reliance Health'),
+(1042, 'Yemi_Alade', '2026-05-21', 4, 'Room 108', 'NEM Insurance'),
+(1043, '  Simi_Kosoko ', '2026-05-22', 1, NULL, 'AXA Mansard'),
+(1044, 'Adekunle_Gold', '2026-05-22', 5, 'ROOM 105', 'Leadway Assurance'),
+(1045, '  Patoranking_Fire ', '05-23-2026', 2, 'Rm 102', 'Reliance Health'),
+(1046, 'Inyanya_Mbong', '2026-05-23', 3, 'Room 201', 'NEM Insurance'),
+(1047, '  Dbanj_Oyebanjo ', '2026-05-24', 4, 'ROOM 110', 'AXA Mansard'),
+(1048, '2Baba_Idibia', '2026-05-24', 1, 'Room 108', NULL),
+(1049, '  Flavour_Nabania ', '05/25/2026', 5, 'Room 105', 'Leadway Assurance'),
+(1050, 'Phyno_Fino', '2026-05-25', 2, 'ROOM 204', 'Reliance Health'),
+(1051, '  Omawumi_Megbele ', '2026-05-26', 3, NULL, 'NEM Insurance'),
+(1052, 'Waje_Iruobe', '2026-05-26', 4, 'Rm 102', 'AXA Mansard'),
+(1053, '  Timaya_Odon ', '05-27-2026', 1, 'Room 201', 'Leadway Assurance'),
+(1054, 'Duncan_Mighty', '2026-05-27', 5, 'ROOM 105', 'Reliance Health'),
+(1055, '  MI_Abaga ', '2026-05-28', 2, 'Room 108', 'NEM Insurance'),
+(1056, 'Ice_Prince', '2026-05-28', 3, 'Room 110', 'AXA Mansard'),
+(1057, '  Jesse_Jagz ', '05/29/2026', 4, NULL, NULL),
+(1058, 'Vector_ThaViper', '2026-05-29', 1, 'Rm 204', 'Leadway Assurance'),
+(1059, '  Illbliss_Oga ', '2026-05-30', 5, 'Room 105', 'Reliance Health'),
+(1060, 'Reminisce_Alaga', '2026-05-30', 2, 'ROOM 102', 'NEM Insurance'),
+(1061, '  Naeto_C ', '05-31-2026', 3, 'Room 201', 'AXA Mansard'),
+(1062, 'Ikechukwu_Killz', '2026-05-31', 4, 'Room 108', 'Leadway Assurance'),
+(1063, '  D_Prince ', '2026-06-01', 1, 'ROOM 110', 'Reliance Health'),
+(1064, 'Dr_SID', '2026-06-01', 5, NULL, 'NEM Insurance'),
+(1065, '  Kcee_Limpopo ', '06/02/2026', 2, 'Rm 105', 'AXA Mansard'),
+(1066, 'Harrysong_Reggae', '2026-06-02', 3, 'Room 102', 'Leadway Assurance'),
+(1067, '  Skiibii_Mayana ', '2026-06-03', 4, 'ROOM 204', NULL),
+(1068, 'Reekado_Banks', '06-04-2026', 1, 'Room 108', 'Reliance Health'),
+(1069, '  Lil_Kesh ', '2026-06-04', 5, 'Room 105', 'NEM Insurance'),
+(1070, 'Kizz_Daniel', '2026-06-05', 2, 'ROOM 110', 'AXA Mansard'),
+(1071, '  Tekno_Miles ', '2026-06-05', 3, NULL, 'Leadway Assurance'),
+(1072, 'Mr_Eazi', '06/06/2026', 4, 'Rm 201', 'Reliance Health'),
+(1073, '  Joeboy_Amaka ', '2026-06-06', 1, 'Room 102', 'NEM Insurance'),
+(1074, 'Fireboy_DML_2', '2026-06-07', 5, 'ROOM 105', 'AXA Mansard'),
+(1075, '  Ox_lade ', '2026-06-07', 2, 'Room 108', NULL),
+(1076, 'Victony_Outlaw', '06-08-2026', 3, 'ROOM 204', 'Leadway Assurance'),
+(1077, '  Buju_BNXN ', '2026-06-08', 4, 'Room 110', 'Reliance Health'),
+(1078, 'Ruger_Dio', '2026-06-09', 1, NULL, 'NEM Insurance'),
+(1079, '  Zlatan_Ibile ', '2026-06-09', 5, 'Rm 105', 'AXA Mansard'),
+(1080, 'Naira_Marley', '06/10/2026', 2, 'Room 102', 'Leadway Assurance'),
+(1081, '  Bella_Shmurda ', '2026-06-10', 3, 'ROOM 201', 'Reliance Health'),
+(1082, 'Mohbad_Imole', '2026-06-11', 4, 'Room 108', 'NEM Insurance'),
+(1083, '  Sey_i_Vibez ', '2026-06-11', 1, 'Room 110', NULL),
+(1084, 'Shallipopi_Pluto', '06-12-2026', 5, 'ROOM 105', 'AXA Mansard'),
+(1085, '  Odumodu_Blvck ', '2026-06-12', 2, NULL, 'Leadway Assurance'),
+(1086, 'Blaqbonez_Emeka', '2026-06-13', 3, 'Rm 102', 'Reliance Health'),
+(1087, '  Chike_Eze ', '2026-06-13', 4, 'Room 204', 'NEM Insurance'),
+(1088, 'Johnny_Drille', '06/14/2026', 1, 'ROOM 108', 'AXA Mansard'),
+(1089, '  Ric_Hassani ', '2026-06-14', 5, 'Room 105', 'Leadway Assurance'),
+(1090, 'Praiz_Adejo', '2026-06-15', 2, 'Room 110', NULL),
+(1091, '  Bez_Idakula ', '2026-06-15', 3, NULL, 'Reliance Health'),
+(1092, 'Cobhams_Asuquo', '06-16-2026', 4, 'Rm 201', 'NEM Insurance'),
+(1093, '  Asa_Esha ', '2026-06-16', 1, 'Room 102', 'AXA Mansard'),
+(1094, 'Nneka_Egbuna', '2026-06-17', 5, 'ROOM 105', 'Leadway Assurance'),
+(1095, '  Yinka_Ayefele ', '2026-06-17', 2, 'Room 108', 'Reliance Health'),
+(1096, 'Pasuma_Wonder', '06/18/2026', 3, 'Room 110', 'NEM Insurance'),
+(1097, '  Saheed_Osupa ', '2026-06-18', 4, 'ROOM 204', NULL),
+(1098, 'Obesere_Abass', '2026-06-19', 1, NULL, 'AXA Mansard'),
+(1099, '  Kwam_One ', '2026-06-19', 5, 'Rm 105', 'Leadway Assurance'),
+(1100, 'King_Sunny_Ade', '06-20-2026', 2, 'Room 102', 'Reliance Health'),
+(1101, '  Ebenezer_Obey ', '2026-06-20', 3, 'ROOM 201', 'NEM Insurance'),
+(1102, 'Sir_Shina_Peters', '2026-06-21', 4, 'Room 108', 'AXA Mansard'),
+(1103, '  Lagbaja_Mask ', '2026-06-21', 1, 'Room 110', NULL),
+(1104, 'Femi_Kuti', '06/22/2026', 5, 'ROOM 105', 'Leadway Assurance'),
+(1105, '  Seun_Kuti ', '2026-06-22', 2, NULL, 'Reliance Health'),
+(1106, 'Made_Kuti', '2026-06-23', 3, 'Rm 102', 'NEM Insurance'),
+(1107, '  Sunny_Neji ', '2026-06-23', 4, 'Room 204', 'AXA Mansard'),
+(1108, 'Tony_Tetuila', '06-24-2026', 1, 'ROOM 108', 'Leadway Assurance'),
+(1109, '  Eedris_Abdulkareem ', '2026-06-24', 5, 'Room 105', 'Reliance Health'),
+(1110, 'Eddy_Montana', '2026-06-25', 2, 'Room 110', NULL),
+(1111, '  Blackface_Naja ', '2026-06-25', 3, NULL, 'NEM Insurance'),
+(1112, 'Faze_Alone', '06/26/2026', 4, 'Rm 201', 'AXA Mansard'),
+(1113, '  2Baba_In_ER ', '2026-06-26', 1, 'Room 102', 'Leadway Assurance'),
+(1114, '9ice_Agbami', '2026-06-27', 5, 'ROOM 105', 'Reliance Health'),
+(1115, '  Idris_Abdulkareem ', '2026-06-27', 2, 'Room 108', 'NEM Insurance'),
+(1116, 'Ruggedman_Opomulero', '06-28-2026', 3, 'Room 110', 'AXA Mansard'),
+(1117, '  Mode_Nine ', '2026-06-28', 4, 'ROOM 204', NULL),
+(1118, 'MI_Abaga_TheGuy', '2026-06-29', 1, NULL, 'Leadway Assurance'),
+(1119, '  Jesse_Jagz_Emperor ', '2026-06-29', 5, 'Rm 105', 'Reliance Health'),
+(1120, 'Ice_Prince_Zamani', '06/30/2026', 2, 'Room 102', 'NEM Insurance'),
+(1121, '  Brymo_Olawale ', '2026-06-30', 3, 'ROOM 201', 'AXA Mansard'),
+(1122, 'Jesse_Jagz_2', '2026-06-29', 5, 'Rm 105', 'Reliance Health'); -- Duplicate log type
+
+SELECT * from raw_hospital_logs;
+
+-- performing the data cleaning process
+SELECT DISTINCT 
+log_id,
+UPPER(REPLACE(TRIM(patient_name), "_", " ")) AS cleaned_patient_names, 
+coalesce(assigned_room, 'UNASSIGNED') AS new_assigned_room,
+coalesce(insurance_provider, 'SELF_PAY') as new_insurance_provider
+FROM raw_hospital_logs;
+ 
+-- creating a new table to that contains my cleaned dataset
+WITH new_raw_hospital_logs AS (
+SELECT DISTINCT 
+log_id,
+
+-- cleaning the patients column 
+UPPER(REPLACE(TRIM(patient_name), '_', " ")) as cleaned_patient_name, 
+CASE 
+
+-- cleaning the admission date column into similar format 
+WHEN admission_date LIKE "%/%" THEN STR_TO_DATE(admission_date, '%m/%d/%Y')
+WHEN admission_date LIKE '__-__-____' THEN STR_TO_DATE(admission_date, "%m-%d-%Y")
+ELSE STR_TO_DATE(admission_date, '%Y-%m-%d') END AS cleaned_admission_date,
+
+-- acuity score
+acuity_score,
+
+-- cleaning the room column to similar format 
+CASE 
+WHEN assigned_room IS NULL THEN 'UNASSIGNED' ELSE 
+UPPER(REPLACE(REPLACE(TRIM(assigned_room), 'Rm', 'ROOM'), 'room', 'ROOM'))
+END AS cleaned_assigned_room,
+
+-- cleaning the insurance column and filling the empty rows
+UPPER(COALESCE(TRIM(insurance_provider), 'SELF-PAY')) AS cleaned_insurance
+FROM raw_hospital_logs
+)
+SELECT * FROM new_raw_hospital_logs
+ORDER BY cleaned_admission_date;
+
+-- to get the number of unassigned patients
+WITH new_raw_hospital_logs AS (
+SELECT DISTINCT 
+log_id,
+
+-- cleaning the patients column 
+UPPER(REPLACE(TRIM(patient_name), '_', " ")) as cleaned_patient_name, 
+CASE 
+
+-- cleaning the admission date column into similar format 
+WHEN admission_date LIKE "%/%" THEN STR_TO_DATE(admission_date, '%m/%d/%Y')
+WHEN admission_date LIKE '__-__-____' THEN STR_TO_DATE(admission_date, "%m-%d-%Y")
+ELSE STR_TO_DATE(admission_date, '%Y-%m-%d') END AS cleaned_admission_date,
+
+-- acuity score
+acuity_score,
+
+-- cleaning the room column to similar format 
+CASE 
+WHEN assigned_room IS NULL THEN 'UNASSIGNED' ELSE 
+UPPER(REPLACE(REPLACE(TRIM(assigned_room), 'Rm', 'ROOM'), 'room', 'ROOM'))
+END AS cleaned_assigned_room,
+
+-- cleaning the insurance column and filling the empty rows
+UPPER(COALESCE(TRIM(insurance_provider), 'SELF-PAY')) AS cleaned_insurance
+FROM raw_hospital_logs
+)
+SELECT acuity_score, COUNT(*) AS unassigned_patients
+FROM new_raw_hospital_logs
+WHERE cleaned_assigned_room = 'UNASSIGNED'
+GROUP BY acuity_score
+ORDER BY acuity_score DESC;
+
+-- get the percentage of the patients brought in by the each provider
+WITH new_raw_hospital_logs AS (
+SELECT DISTINCT 
+log_id,
+
+-- cleaning the patients column 
+UPPER(REPLACE(TRIM(patient_name), '_', " ")) as cleaned_patient_name, 
+CASE 
+
+-- cleaning the admission date column into similar format 
+WHEN admission_date LIKE "%/%" THEN STR_TO_DATE(admission_date, '%m/%d/%Y')
+WHEN admission_date LIKE '__-__-____' THEN STR_TO_DATE(admission_date, "%m-%d-%Y")
+ELSE STR_TO_DATE(admission_date, '%Y-%m-%d') END AS cleaned_admission_date,
+
+-- acuity score
+acuity_score,
+
+-- cleaning the room column to similar format 
+CASE 
+WHEN assigned_room IS NULL THEN 'UNASSIGNED' ELSE 
+UPPER(REPLACE(REPLACE(TRIM(assigned_room), 'Rm', 'ROOM'), 'room', 'ROOM'))
+END AS cleaned_assigned_room,
+
+-- cleaning the insurance column and filling the empty rows
+UPPER(COALESCE(TRIM(insurance_provider), 'SELF-PAY')) AS cleaned_insurance
+FROM raw_hospital_logs
+)
+SELECT * FROM new_raw_hospital_logs
+ORDER BY cleaned_admission_date;
+
+-- to get the number of insurance by patients
+WITH new_raw_hospital_logs AS (
+SELECT DISTINCT 
+log_id,
+
+-- cleaning the patients column 
+UPPER(REPLACE(TRIM(patient_name), '_', " ")) as cleaned_patient_name, 
+CASE 
+
+-- cleaning the admission date column into similar format 
+WHEN admission_date LIKE "%/%" THEN STR_TO_DATE(admission_date, '%m/%d/%Y')
+WHEN admission_date LIKE '__-__-____' THEN STR_TO_DATE(admission_date, "%m-%d-%Y")
+ELSE STR_TO_DATE(admission_date, '%Y-%m-%d') END AS cleaned_admission_date,
+
+-- acuity score
+acuity_score,
+
+-- cleaning the room column to similar format 
+CASE 
+WHEN assigned_room IS NULL THEN 'UNASSIGNED' ELSE 
+UPPER(REPLACE(REPLACE(TRIM(assigned_room), 'Rm', 'ROOM'), 'room', 'ROOM'))
+END AS cleaned_assigned_room,
+
+-- cleaning the insurance column and filling the empty rows
+UPPER(COALESCE(TRIM(insurance_provider), 'SELF-PAY')) AS cleaned_insurance
+FROM raw_hospital_logs
+)
+SELECT cleaned_insurance, COUNT(*) AS total_number_of_insurance, COUNT(*) * 100 / (SELECT COUNT(*) FROM new_raw_hospital_logs) AS total_percentage_by_insurance
+FROM new_raw_hospital_logs
+GROUP BY cleaned_insurance
+ORDER BY cleaned_insurance ASC;
+
+-- to get the number of check ins per day 
+WITH new_raw_hospital_logs AS (
+SELECT DISTINCT 
+log_id,
+
+-- cleaning the patients column 
+UPPER(REPLACE(TRIM(patient_name), '_', " ")) as cleaned_patient_name, 
+
+-- cleaning the admission date column into similar format 
+CASE
+WHEN TRIM(admission_date) LIKE "%/%" THEN STR_TO_DATE(TRIM(admission_date), '%m/%d/%Y')
+WHEN TRIM(admission_date) LIKE '__-__-____' THEN STR_TO_DATE(TRIM(admission_date), "%m-%d-%Y")
+ELSE STR_TO_DATE(TRIM(admission_date), '%Y-%m-%d') END AS cleaned_admission_date,
+
+-- acuity score
+acuity_score,
+
+-- cleaning the room column to similar format 
+CASE 
+WHEN assigned_room IS NULL THEN 'UNASSIGNED' ELSE 
+UPPER(REPLACE(REPLACE(TRIM(assigned_room), 'Rm', 'ROOM'), 'room', 'ROOM'))
+END AS cleaned_assigned_room,
+
+-- cleaning the insurance column and filling the empty rows
+UPPER(COALESCE(TRIM(insurance_provider), 'SELF-PAY')) AS cleaned_insurance
+FROM raw_hospital_logs
+)
+SELECT cleaned_admission_date, COUNT(*) AS total_number_of_patients_by_day
+FROM new_raw_hospital_logs 
+GROUP BY cleaned_admission_date 
+ORDER BY cleaned_admission_date ASC
+ 
