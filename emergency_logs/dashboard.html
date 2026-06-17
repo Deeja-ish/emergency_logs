@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER Operation and Bed Allocation Data</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ER Operation and Bed Allocation Data</h1>
+            <p>Live Cleaned Data Emergency patients</p>
+        </div>
+        <div class="main-layout">
+            <div class="card">
+                <h3>ER hallway traffic Data</h3>
+                <canvas id="hallwaytrafficChart" height="150"></canvas>
+            </div>
+            <div class="side-layout">
+                <div class="card">
+                    <h3>Operational Requirement</h3>
+                    <div class="alert-box">
+                        CRITICAL ASSIGNMENT REQUIRED: <br>
+                        <span class="highlight">{{ acuity_5_count }}</span> Level 5 acuity patient{{ 's' if acuity_5_count != 1 else '' }} stranded without a bed
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Inject data from Flask to global JS variables
+    const acuity_label = {{ acuity_score | tojson }};
+    const patient_count = {{ patient_count | tojson }};
+</script>
+<script src="script.js"></script>
+
+</html>
